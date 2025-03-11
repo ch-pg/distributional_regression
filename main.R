@@ -5,11 +5,11 @@
 set.seed(314)
 
 # Source R scripts
-source("/Users/cheng/Desktop/FMQ/code/Github/src/quantile-functions.R")
-source("/Users/cheng/Desktop/FMQ/code/Github/src/utils-functions.R")
-source("/Users/cheng/Desktop/FMQ/code/Github/src/optimization-setup.R")
-source("/Users/cheng/Desktop/FMQ/code/Github/src/prediction.R")
-source("/Users/cheng/Desktop/FMQ/code/Github/src/evaluation.R")
+source("R/quantile-functions.R")
+source("R/utils-functions.R")
+source("R/optimization-setup.R")
+source("R/prediction.R")
+source("R/evaluation.R")
 
 # Load libraries
 library(readxl)
@@ -37,7 +37,7 @@ num_knots_i <- 1 # number of spline knots of basis quantile function
 time_limit <- 300 # time limit for optimization
 
 # Load and preprocess data
-data_load <- read_excel('/Users/cheng/Desktop/FMQ/code/CCPP/Folds5x2_pp.xlsx', sheet = 1)
+data_load <- read_excel('R/data/Folds5x2_pp.xlsx', sheet = 1)
 data_load <- as.data.frame(data_load)
 observation_all <- data_load[, 5]
 data_all <- data_load[, 1:4]
