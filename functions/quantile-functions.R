@@ -52,49 +52,58 @@ qlomax_def_left <- function(prob, rate_left = 1) {
   return(-qlomax_def(1 - prob, rate_left))
 }
 
-#' Create list of basis quantile functions
+
+
+
+#' Create list of quantile functions
 #' 
-#' @param degree_i Degree of spline basis (NA for no spline basis)
-#' @param num_knots_i Number of interior knots
-#' @return List containing quantile function evaluation function
-create_quantile_func_list <- function(degree_i = NA, num_knots_i = 1) {
-  # Basic quantile functions (variable name not changed), only right tail
-  quantile_func_list <- list(function(p) return(1), qnorm)
-  quantile_func_list_defined_length <- length(quantile_func_list)
+#' @param degree Degree of I-spline (NA if no splines desired)
+#' @param num_knots Number of interior knots for I-spline (NA if no splines desired)
+#' @param quantile_funcs List of defined quantile functions of common distributions
+#' @return List containing quantile_func_list (list of functions), quantile_func_eval (evaluation function), 
+#'         and nonspline_num (number of non-spline functions)
+create_quantile_func_list <- function(degree, num_knots, 
+                                      quantile_funcs = list(qnorm)) {
+  require(splines2)
+  
+  # Define basis quantile functions using constant function and known distributions
+  quantile_func_list <- c(list(function(p) return(1)), lapply(quantile_funcs, match.fun))  
+  
+  # Verify all elements are functions
+  if (!all(sapply(quantile_func_list, is.function))) {
+    stop("All provided arguments must correspond to functions")
+  }
+  
   nonspline_num <- length(quantile_func_list)
   
-  # Add placeholder functions if using splines
-  if (!is.na(degree_i)) {
-    for (cnt in 1:(num_knots_i + degree_i + 1)) {
-      quantile_func_list[[cnt + quantile_func_list_defined_length]] <- function(p) {
-        return(0)
-      } # place holder
+  # If degree is not NA, prepare for I-spline basis functions
+  if (!is.na(degree)) {
+    # Placeholder functions for I-spline bases (not actually used, as evaluation is dynamic)
+    for (cnt in 1:(num_knots + degree + 1)) {
+      quantile_func_list[[nonspline_num + cnt]] <- function(p) return(0)
     }
   }
   
-  # Helper function to evaluate with arguments
-  eval.with.args <- function(FUN, ...) FUN(...)
-  
-  # Create evaluation function
-  if (is.na(degree_i + num_knots_i)) { # no I-spline
+  # Evaluation function
+  if (is.na(degree) || is.na(num_knots)) {  # No I-splines
     quantile_func_eval <- function(p) {
-      return(unlist(lapply(quantile_func_list, eval.with.args, p))[1:nonspline_num])
+      sapply(quantile_func_list, function(func) func(p))[1:nonspline_num]
     }
-  } else {
+  } else {  # With I-splines
     quantile_func_eval <- function(p) {
-      return(c(
-        unlist(lapply(quantile_func_list, eval.with.args, p))[1:nonspline_num],
+      c(
+        sapply(quantile_func_list, function(func) func(p))[1:nonspline_num],
         iSpline(p, Boundary.knots = c(0, 1),
-                knots = seq(0, 1, length.out = num_knots_i + 2)[-c(1, num_knots_i + 2)],
-                degree = degree_i, intercept = TRUE)
-      ))
+                knots = seq(0, 1, length.out = num_knots + 2)[-c(1, num_knots + 2)],
+                degree = degree, intercept = TRUE)
+      )
     }
   }
   
-  # Return a list with both components
   return(list(
     quantile_func_list = quantile_func_list,
     quantile_func_eval = quantile_func_eval,
     nonspline_num = nonspline_num
   ))
 }
+
