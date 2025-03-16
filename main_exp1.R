@@ -39,7 +39,7 @@ num_knots_i <- 2 # number of spline knots of basis quantile function
 time_limit <- 300 # time limit for optimization
 
 # Load and preprocess data
-data_load <-  as.data.frame(read_excel('data/CPI_data.xlsx', sheet = 1, col_names = c('1', '2', '3')))
+data_load <-  as.data.frame(read_excel('data/CPI_data.xlsx', sheet = 1, col_names = c('x1', 'x2', 'y')))
 observation_all <- data_load[, 3]
 data_all <- data_load[, c(1,2)]
 

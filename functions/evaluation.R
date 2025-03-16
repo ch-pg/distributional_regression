@@ -253,7 +253,7 @@ generate_3d_plots <- function(data,
         alpha = alpha_3d,
         xlab = colnames(data)[x_feature],
         ylab = colnames(data)[y_feature],
-        zlab = "Prediction"
+        zlab = 'y' # 'Response Variable'
       )
       surface3d(theta_1_gridsurf, theta_2_gridsurf, z_list_gridsurf[[cnt0]], front = 'lines')
     } else {

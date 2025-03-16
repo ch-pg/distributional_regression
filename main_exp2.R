@@ -1,6 +1,6 @@
 #' Cross Validation for Distributional Regression
-#' 
 #' Runs the full analysis including data preprocessing, optimization, prediction, and cross-validation.
+#' Differs from Experiment 1 in main_exp1.R by dataset, model hyperparameters, and cross-validation procedure
 
 set.seed(314)
 
