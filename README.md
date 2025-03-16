@@ -30,7 +30,7 @@ source("main_exp1.R")
 
 The 3D plot below depicts the quantile surfaces of confidence levels p = 0.05 and p=0.95 in Experiment 1. The black dots are the data points. The quantile surface is the conditional p-quantile of the response variable as a function of the features. The surfaces do not cross each other by definition of the model.
 
-<img src="Figures/3d_plot.png" width="500">
+<img src="Figures/3d_plot.png" width="400"> 
 
 <!---
 ![](Figures/3d_plot.png)
@@ -40,7 +40,7 @@ The 3D plot below depicts the quantile surfaces of confidence levels p = 0.05 an
 The coverage curve below shows the out-of-sample coverage rate of the model at the p-quantile as a function of the confidence level p. The empirical coverage rate is defined as the percentage of data points that fall below the p-quantile surface.  The results align reasonably well with the perfect coverage line, represented by the black line.
 
 
-<img src="Figures/Coverage_curve.png" width="450" >
+<img src="Figures/Coverage_curve.png" width="400" >
 
 
 <!---
