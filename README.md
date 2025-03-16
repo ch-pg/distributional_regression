@@ -8,57 +8,43 @@ This repository contains an implementation of a nonparametric distributional reg
 distributional_regression/
 ├── README.md                # Project description
 ├── data/                    # Data directory
-│   └── Folds5x2_pp.xlsx     # Dataset (Combined Cycle Power Plant from UCI Data)
+│   ├── CPI_data.xlsx        # Dataset for experiment 1 (CPI from FRED)
+|   └── Folds5x2_pp.xlsx     # Dataset for experiment 2 (Combined Cycle Power Plant from UCI Data)
 ├── functions/               # Functions directory
 │   ├── quantile-functions.R # Basis quantile functions definitions
 │   ├── utils-functions.R    # Utility functions
 │   ├── optimization-setup.R # Variable setup for optimization
 │   ├── prediction.R         # Prediction functions
 │   └── evaluation.R         # Evaluation metrics and plots (CRPS, coverage rate, 3d plot)
-└── main.R                   # Main script that sources and runs everything (cross validation)
+├── main_exp1.R              # Experiment 1: Visualization
+└── main_exp2.R              # Experiment 2: Cross validation
 ```
-<!---
-├── results/                 # Results directory
-│   └── ...                  # Generated plots, tables, etc.
---->
 
-<!---
-## Dependencies
-
-The following R packages are required:
-- readxl
-- Matrix
-- splines2
-- gurobi
-- ggplot2
-- reshape2
-- abind
-- dplyr
---->
 
 ## Usage
 
- <!---
-1. Clone the repository
-2. Ensure you have Gurobi installed and configured
-3. Put your data file in the data directory
-4. Run the main script:
+Run the full analysis including data preprocessing, optimization, prediction, and evaluation.
+```r
+source("main_exp1.R")
+```
+
+The 3D plot below depicts the quantile surfaces of confidence levels p = 0.05 and p=0.95 in Experiment 1. The black dots are the data points. The quantile surface is the conditional p-quantile of the response variable as a function of the features. The surfaces do not cross each other by definition of the model.
+
+<img src="Figures/3d_plot.png" width="500">
+
+<!---
+![](Figures/3d_plot.png)
 --->
 
-```r
-source("main.R")
-```
- <!---
-## Description of Modules
 
-- **utils.R**: Contains utility functions for data manipulation and tensor product operations
-- **basis_functions.R**: Functions for creating B-spline basis functions
-- **quantile_functions.R**: Functions for creating and evaluating quantile basis functions
-- **optimization.R**: Functions for setting up and running the Gurobi optimization
-- **prediction.R**: Functions for making predictions with the fitted model
-- **evaluation.R**: Functions for evaluating model performance
-- **main.R**: Main script that orchestrates the workflow
+The coverage curve below shows the out-of-sample coverage rate of the model at the p-quantile as a function of the confidence level p. The empirical coverage rate is defined as the percentage of data points that fall below the p-quantile surface.  The results align reasonably well with the perfect coverage line, represented by the black line.
 
+
+<img src="Figures/Coverage_curve.png" width="450" >
+
+
+<!---
+![](Figures/Coverage_curve.png)
 --->
 
 ## Model Description
@@ -80,19 +66,3 @@ quantile crossing. We use spline functions
 of factors as a primary example for the
 weight function.
 
-
-<!---
-## Evaluation Metrics
-
-The model is evaluated using:
-- Pinball loss for each quantile
-- Coverage (proportion of true values below predicted quantile)
-- Interval widths between consecutive quantiles
-- Calibration curves
-- CRPS (Continuous Ranked Probability Score)
-
-## License
-
-[Insert your license information here]
-
---->
