@@ -141,6 +141,11 @@ plot_coverage_curves <- function(coverage_rate, coverage_quantile_vec, mean_cv_c
     coord_fixed(ratio = 1) +
     labs(color = "Fold Number")
   
+  # Remove legend if there is only one fold
+  if (nrow(coverage_rate) == 1) {
+    p <- p + theme(legend.position = "none")
+  }
+  
   print(p)
 }
 
@@ -163,7 +168,8 @@ generate_3d_plots <- function(data,
                               confidence_vec_plot = c(0.05, 0.5, 0.95),
                               xlim_3d = NULL,
                               ylim_3d = NULL,
-                              zlim_3d = NULL) {
+                              zlim_3d = NULL,
+                              alpha = 0.3) {
   require(rgl)
   require(viridis)
   
@@ -237,7 +243,7 @@ generate_3d_plots <- function(data,
   pal <- viridis.colors(100) 
   col.ind <- cut(unlist(z_combined), 100)
   
-  alpha_3d <- 0.8
+  alpha_3d <- alpha
   for (cnt0 in 1:length(confidence_vec_plot)) {
     if (cnt0 == 1) {
       persp3d(
